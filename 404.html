@@ -4,14 +4,16 @@
   <meta charset="utf-8">
   <title>Redirecting…</title>
   <script>
-    // Reuse same logic as index.html
     (function() {
       const path = window.location.pathname;
       if (path.startsWith("/join/")) {
         const code = path.split("/").pop();
-        window.location.href = "intent://join/" + code + "#Intent;scheme=https;package=com.leonbela.belamultiplayerclient;end";
+
+        // Use HTTPS deep link instead of intent://
+        window.location.href = "https://cico-source.github.io/join/" + code;
+
+        // If app is not installed, it will just stay on the browser page
       } else {
-        // Fallback to homepage if path not handled
         window.location.href = "/";
       }
     })();
@@ -21,3 +23,4 @@
   <h1>Redirecting…</h1>
 </body>
 </html>
+

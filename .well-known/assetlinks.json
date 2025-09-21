@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.leonbela.belamultiplayerclient",
+      "sha256_cert_fingerprints": [
+        "94:7E:D4:68:B9:D5:98:DE:E5:55:C1:25:0E:CF:5E:76:06:ED:9D:B9:86:7C:CA:C7:D2:35:2D:E0:8D:F9:C7:8D"
+      ]
+    }
+  }
+]

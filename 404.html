@@ -9,7 +9,7 @@
       const path = window.location.pathname;
       if (path.startsWith("/join/")) {
         const code = path.split("/").pop();
-        window.location.href = "intent://join/" + code + "#Intent;scheme=https;package=com.example.app;end";
+        window.location.href = "intent://join/" + code + "#Intent;scheme=https;package=com.leonbela.belamultiplayerclient;end";
       } else {
         // Fallback to homepage if path not handled
         window.location.href = "/";

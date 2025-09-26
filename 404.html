@@ -6,15 +6,34 @@
   <script>
     (function() {
       const path = window.location.pathname;
-      if (path.startsWith("/join/")) {
-        const code = path.split("/").pop();
-
-        // Use HTTPS deep link instead of intent://
-        window.location.href = "https://cico-source.github.io/join/" + code;
-
-        // If app is not installed, it will just stay on the browser page
-      } else {
+      if (!path.startsWith("/join/")) {
         window.location.href = "/";
+        return;
+      }
+
+      const code = path.split("/").pop();
+      const httpsUrl = `https://cico-source.github.io/join/${code}`;
+      const playStoreUrl = `https://play.google.com/store/apps/details?id=com.leonbela.belamultiplayerclient`;
+
+      // Build an intent link that resolves the HTTPS app link
+      const urlObj = new URL(httpsUrl);
+      const intentLink =
+        `intent://${urlObj.host}${urlObj.pathname}#Intent;scheme=https;package=com.leonbela.belamultiplayerclient;S.browser_fallback_url=${encodeURIComponent(playStoreUrl)};end`;
+
+      // If on Android, try the intent first and fall back to the HTTPS page if app didn't open.
+      if (/android/i.test(navigator.userAgent)) {
+        // Try intent — if app opens, page becomes hidden and fallback won't run.
+        window.location.href = intentLink;
+
+        // After a short delay, if the page is still visible, go to the HTTPS page (works for desktop and when app not installed).
+        setTimeout(() => {
+          if (!document.hidden) {
+            window.location.href = httpsUrl; // <-- your missing line preserved here
+          }
+        }, 800);
+      } else {
+        // Non-Android browsers: go to the HTTPS URL (local / desktop builds)
+        window.location.href = httpsUrl; // <-- same line for browsers
       }
     })();
   </script>
@@ -23,4 +42,5 @@
   <h1>Redirecting…</h1>
 </body>
 </html>
+
 

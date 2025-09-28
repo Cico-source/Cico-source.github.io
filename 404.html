@@ -15,25 +15,26 @@
       const httpsUrl = `https://cico-source.github.io/join/${code}`;
       const playStoreUrl = `https://play.google.com/store/apps/details?id=com.leonbela.belamultiplayerclient`;
 
-      // Build an intent link that resolves the HTTPS app link
       const urlObj = new URL(httpsUrl);
       const intentLink =
         `intent://${urlObj.host}${urlObj.pathname}#Intent;scheme=https;package=com.leonbela.belamultiplayerclient;S.browser_fallback_url=${encodeURIComponent(playStoreUrl)};end`;
 
-      // If on Android, try the intent first and fall back to the HTTPS page if app didn't open.
       if (/android/i.test(navigator.userAgent)) {
-        // Try intent — if app opens, page becomes hidden and fallback won't run.
+        // On Android → try opening app via intent
         window.location.href = intentLink;
 
-        // After a short delay, if the page is still visible, go to the HTTPS page (works for desktop and when app not installed).
         setTimeout(() => {
           if (!document.hidden) {
-            window.location.href = httpsUrl; // <-- your missing line preserved here
+            window.location.href = httpsUrl;
           }
         }, 800);
       } else {
-        // Non-Android browsers: go to the HTTPS URL (local / desktop builds)
-        window.location.href = httpsUrl; // <-- same line for browsers
+        // On desktop → don't redirect infinitely, just show a message or Play Store
+        document.body.innerHTML = `
+          <h1>Open this link on your Android device</h1>
+          <p>Or install the app from the <a href="${playStoreUrl}" target="_blank">Google Play Store</a>.</p>
+          <p>Invite Code: <b>${code}</b></p>
+        `;
       }
     })();
   </script>
@@ -42,5 +43,3 @@
   <h1>Redirecting…</h1>
 </body>
 </html>
-
-
